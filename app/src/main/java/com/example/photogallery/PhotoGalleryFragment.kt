@@ -7,7 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.photogallery.api.FlickrApi
 import com.example.photogallery.databinding.FragmentPhotoGalleryBinding
@@ -32,22 +36,22 @@ class PhotoGalleryFragment : Fragment() {
         return binding.root
     }
 
+    private val photoGalleryViewModel: PhotoGalleryViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://www.flickr.com")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        val flickrApi: FlickrApi = retrofit.create<FlickrApi>()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-          try {
-              val response = PhotoRepository().fetchPhotos();
-              Log.d("REASONING", "Answer to Problem: $response")
-          } catch (ex: Exception) {
-            Log.e("Erring Exception", "Failed to fetch galelry items", ex);
+//        val retrofit: Retrofit = Retrofit.Builder()
+//            .baseUrl("https://www.flickr.com")
+//            .addConverterFactory(ScalarsConverterFactory.create())
+//            .build()
+//        val flickrApi: FlickrApi = retrofit.create<FlickrApi>()
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                photoGalleryViewModel.galleryItems.collect { items ->
+                    Log.d(TAG, "RESPONSE RECEIVED: $items")
+                }
+            }
         }
-          }
 
     }
     override fun onDestroyView() {
