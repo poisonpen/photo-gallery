@@ -51,6 +51,8 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt:coil:2.0.0-rc02")
+
     implementation("com.squareup.moshi:moshi:1.13.0")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
