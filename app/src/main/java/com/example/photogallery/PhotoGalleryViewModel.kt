@@ -29,4 +29,15 @@ class PhotoGalleryViewModel: ViewModel() {
             }
         }
     }
+
+//    fun setQuery(query: String) {
+//        viewModelScope.launch { _galleryItems.value = fetchGalleryItems(query) }
+//    }
+//    private suspend fun fetchGalleryItems(query: String): List<GalleryItem> {
+//        return if (query.isNotEmpty()) {
+//            else {
+//                photoRepository.fetchPhotos()
+//            }
+//        }
+//    }
 }
