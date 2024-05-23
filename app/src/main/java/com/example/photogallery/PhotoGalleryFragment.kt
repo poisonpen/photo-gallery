@@ -5,8 +5,12 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
@@ -60,4 +64,29 @@ class PhotoGalleryFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true);
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_photo_gallery, menu)
+        Log.d("displayChangeHere", "startSearch")
+
+        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
+        val searchView = searchItem.actionView as SearchView?
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("displayChangeHere", "QueryTextSubmit: $query")
+                photoGalleryViewModel.setQuery(query ?: "")
+                return true;
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("displayChangeHere", "QueryTextChange: $newText")
+                return false
+            }
+        })
+    }
 }

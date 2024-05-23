@@ -51,6 +51,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
     implementation("io.coil-kt:coil:2.0.0-rc02")
 
     implementation("com.squareup.moshi:moshi:1.13.0")
