@@ -7,11 +7,13 @@ import com.example.photogallery.api.GalleryItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 private const val TAG = "PHOTOGROWLERY--VIEWMODEL";
 class PhotoGalleryViewModel: ViewModel() {
     private val photoRepository = PhotoRepository()
+    private val preferencesRepository = PreferencesRepository.get()
 
     private val _galleryItems: MutableStateFlow<List<GalleryItem>> =
         MutableStateFlow(emptyList())
@@ -20,18 +22,21 @@ class PhotoGalleryViewModel: ViewModel() {
 
     init {
         viewModelScope.launch {
-            try {
-                val items = fetchGalleryItems("")
-                 //val items = photoRepository.fetchPhotos()
-                Log.d(TAG, "ITEMS RECEiVED: $items")
-                _galleryItems.value = items
-            } catch (ex: Exception) {
-                Log.e(TAG, "FAILED TO FETCH GALLERY ITEMS", ex)
+            preferencesRepository.storedQuery.collectLatest { storedQuery ->
+                try {
+                    val items = fetchGalleryItems(storedQuery)
+                    //val items = photoRepository.fetchPhotos()
+                    Log.d(TAG, "ITEMS RECEiVED: $items")
+                    _galleryItems.value = items
+                } catch (ex: Exception) {
+                    Log.e(TAG, "FAILED TO FETCH GALLERY ITEMS", ex)
+                }
             }
         }
     }
     fun setQuery(query: String) {
-        viewModelScope.launch { _galleryItems.value = fetchGalleryItems(query) }
+       // viewModelScope.launch { _galleryItems.value = fetchGalleryItems(query) }
+        viewModelScope.launch { preferencesRepository.setStoredQuery(query) }
     }
 
     private suspend fun fetchGalleryItems(query: String): List<GalleryItem> {

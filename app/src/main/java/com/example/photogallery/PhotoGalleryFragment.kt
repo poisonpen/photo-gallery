@@ -89,4 +89,13 @@ class PhotoGalleryFragment : Fragment() {
             }
         })
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_clear -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
