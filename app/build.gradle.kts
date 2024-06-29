@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.work:work-runtime:2.9.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("io.coil-kt:coil:2.0.0-rc02")
