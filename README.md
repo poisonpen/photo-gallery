@@ -1,1 +1,1 @@
-displays random photos courtesy of imgur
+displays random photos courtesy of flickr.
